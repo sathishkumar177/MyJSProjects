@@ -1,49 +1,42 @@
-var itemList = document.querySelector('#items');
-//parentNode
-// console.log(itemList.parentNode);
-// itemList.parentNode.style.backgroundColor='yellow';
-// console.log(itemList.parentNode.parentNode);
-// itemList.parentNode.parentNode.style.backgroundColor='black';
+var form=document.getElementById('addForm');
+var itemList=document.getElementById('items');
 
-// //parentElement
-// console.log(itemList.parentElement);
-// itemList.parentElement.style.backgroundColor='yellow';
-// console.log(itemList.parentElement.parentNode);
-// itemList.parentElement.parentElement.style.backgroundColor='black';
+form.addEventListener('submit', addItem);
 
+itemList.addEventListener('click', removeEl);
 
-//childNodes
-// console.log(itemList.childNodes);
+//add Item
+function addItem(e){
+    e.preventDefault();
+    var newItem=document.getElementById('item').value;
 
-// console.log(itemList.children);
-// itemList.children[1].style.backgroundColor='Yellow';
+    var li=document.createElement('li');
 
-// itemList.firstElementChild.style.backgroundColor='pink';
+    //add clas
+    li.className='list-group-item';
+    var inputValue=document.createTextNode(newItem);
+    li.appendChild(inputValue);
 
-// itemList.lastElementChild.style.backgroundColor='violet';
+    itemList.appendChild(li);
 
-console.log(itemList.previousElementSibling);
-itemList.previousElementSibling.style.backgroundColor='Yellow';
+    var deleteBtn=document.createElement('button');
 
-//createElement
+    deleteBtn.className='btn btn-danger btn-sm float-right delete';
 
-var newDiv=document.createElement('div');
-newDiv.className='Hello';
-newDiv.id='Hello-1';
-newDiv.setAttribute('title','Hellow Div');
+    deleteBtn.appendChild(document.createTextNode('X'));
 
-var newDivText = document.createTextNode('Hello World');
-newDiv.appendChild(newDivText);
-console.log(newDiv);
+    li.appendChild(deleteBtn);
 
+    console.log(li);
+}
 
-var container=document.querySelector('header .container');
-var h1=document.querySelector('header h1');
-container.insertBefore(newDiv, h1);
+function removeEl(e){
+    if(e.target.classList.contains('delete')){
+        console.log(1);
+        if(confirm('Are you sure')){
+            var x=e.target.parentElement; 
+        }
+        itemList.removeChild(x);
+    }
 
-
-
-
-
-
-
+}

@@ -7,7 +7,7 @@ form.addEventListener('submit', addItem);
 itemList.addEventListener('click', removeEl);
 
 filter.addEventListener('keyup', filterItems);
-//localStorage.removeItem('Sathishkumar');
+//localStorage.removeItem('object');
 
 //add Item
 function addItem(e){
@@ -35,7 +35,14 @@ function addItem(e){
 
     li.appendChild(deleteBtn);
 
-    localStorage.setItem(newItem, newItem2);
+    
+    let obj ={
+        firstname: newItem,
+        lastname: newItem2
+    }
+    let obj_serialised = JSON.stringify(obj);
+    localStorage.setItem('object', obj_serialised);
+    console.log(localStorage);
 
     //console.log(li);
 }

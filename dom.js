@@ -7,6 +7,7 @@ form.addEventListener('submit', addItem);
 itemList.addEventListener('click', removeEl);
 
 filter.addEventListener('keyup', filterItems);
+//localStorage.removeItem('Sathishkumar');
 
 //add Item
 function addItem(e){
@@ -33,6 +34,8 @@ function addItem(e){
     deleteBtn.appendChild(document.createTextNode('X'));
 
     li.appendChild(deleteBtn);
+
+    localStorage.setItem(newItem, newItem2);
 
     //console.log(li);
 }

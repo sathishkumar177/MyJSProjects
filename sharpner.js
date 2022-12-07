@@ -1,73 +1,137 @@
-var form=document.getElementById('addForm');
-var userList=document.getElementById('users');
+const myForm = document.querySelector('#my-form')
 
+const nameInput = document.querySelector('#name');
 
-form.addEventListener('submit', addUser);
-userList.addEventListener('click', removeEl);
+const emailInput = document.querySelector('#email');
 
-//localStorage.removeItem('object');
+const msg = document.querySelector('.msg');
 
-function addUser(e){
-    e.preventDefault();
-    var newItem=document.getElementById('name').value;
-    var newItem2=document.getElementById('email').value;
+myForm.addEventListener('submit', onSubmit);
 
-    var li=document.createElement('li');
+function onSubmit(e) 
 
-    li.className='list-users';
-   // var inputValue=document.createTextNode(`${newItem} ${newItem2}`);
-  // var inputValue2=document.createTextNode(newItem2);
-    
-    //itemList.appendChild(li.appendChild(inputValue2));
+{
 
-    let obj ={
-        firstname: newItem,
-        lastname: newItem2
+  e.preventDefault();
+
+  if(nameInput.value === '' || emailInput.value === '') 
+
+  {
+
+    msg.classList.add('error');
+
+    msg.innerHTML = 'Please enter all fields';
+
+    setTimeout(() => msg.remove(), 3000);
+
+  } 
+
+  else 
+
+  {
+
+    var ObjectsPresent=[]
+
+    if(localStorage.getItem('myObj'))
+
+    {
+
+      ObjectsPresent=JSON.parse(localStorage.getItem('myObj'))
+
     }
-    let obj_serialised = JSON.stringify(obj);
-    localStorage.setItem(newItem2, obj_serialised);
 
-    //console.log(li);
-    var parsedUser=document.createTextNode(localStorage.getItem(newItem2));
-    console.log(localStorage.getItem(newItem2));
-    console.log(parsedUser);
-    li.appendChild(parsedUser);
+    let myNewObj={name:nameInput.value,email:emailInput.value}
 
-    userList.appendChild(li);
-    
-    var deleteBtn=document.createElement('button');
-    
-    deleteBtn.className='btn btn-danger btn-sm float-right delete';
-    
-    deleteBtn.appendChild(document.createTextNode('X'));
-    
-    li.appendChild(deleteBtn);
-    
-    
+    ObjectsPresent.push(myNewObj)
+
+    let ObjectsPresent_serialized = JSON.stringify(ObjectsPresent)
+
+    localStorage.setItem('myObj',ObjectsPresent_serialized)
+
+    nameInput.value = '';
+
+    emailInput.value = '';
+
+
+
+    let myObj_deserialized = JSON.parse(localStorage.getItem('myObj'))
+
+    var html = "<table border='1|1'>"
+
+    for(var i=0;i<myObj_deserialized.length;i++)
+
+    {
+
+      html+='<tr>'
+
+      html+='<td>'+myObj_deserialized[i].name+'</td>';
+
+      html+='<td>'+myObj_deserialized[i].email+'</td>';
+
+      html+='<td> <button onclick="deleteRow('+i+')"> Delete </button> </td>'
+
+      html+='<td> <button onclick="editRow('+i+')"> Edit </button> </td>'
+
+      html+='</tr>'
+
+    }
+
+    document.getElementById("table").innerHTML = html   
+
+  }
+
 }
-    
 
 
-function removeEl(e){
-    if(e.target.classList.contains('delete')){
-        console.log(1);
-        if(confirm('Are you sure')){
-            var x=e.target.parentElement; 
-        }
-        userList.removeChild(x);
+
+function deleteRow(i)
+
+{
+
+  let myObj_deserialized = JSON.parse(localStorage.getItem('myObj'))
+
+  myObj_deserialized.splice(i,1)
+
+  localStorage.setItem('myObj',JSON.stringify(myObj_deserialized))
+
+  myObj_deserialized = JSON.parse(localStorage.getItem('myObj'))
+
+    var html = "<table border='1|1'>"
+
+    for(var i=0;i<myObj_deserialized.length;i++)
+
+    {
+
+      html+='<tr>'
+
+      html+='<td>'+myObj_deserialized[i].name+'</td>';
+
+      html+='<td>'+myObj_deserialized[i].email+'</td>';
+
+      html+='<td> <button onclick="deleteRow('+i+')"> Delete </button> </td>'
+
+      html+='<td> <button onclick="editRow('+i+')"> Edit </button> </td>'
+
+      html+='</tr>'
+
     }
+
+    document.getElementById("table").innerHTML = html 
 
 }
-console.log(allStorage());
-function allStorage() {
 
-    var values = [],
-        keys = Object.keys(localStorage),
-        i = keys.length;
 
-    while ( i-- ) {
-        values.push( localStorage.getItem(keys[i]) );
-    }
 
-    return values;
+function editRow(i)
+
+{
+
+  let myObj_deserialized = JSON.parse(localStorage.getItem('myObj'))
+
+  nameInput.value = myObj_deserialized[i].name;
+
+  emailInput.value = myObj_deserialized[i].email;
+
+  deleteRow(i);
+
 }
